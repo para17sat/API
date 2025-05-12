@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- displays site properly based on user's device -->
+
+  <link rel="icon" type="image/png" sizes="32x32" href="./images/favicon-32x32.png">
+  
+  <title>Frontend Mentor | Advice generator app</title>
+
+  <!-- Feel free to remove these styles or customise in your own stylesheet 👍 -->
+  <style>
+    .attribution { font-size: 11px; text-align: center; }
+    .attribution a { color: hsl(228, 45%, 44%); }
+    *{
+      padding: 0;
+      margin: 0;
+      box-sizing: border-box;
+      overflow-x: hidden;
+    }
+  </style>
+</head>
+<body style="background-color: hsl(218, 23%, 16%); display: flex;flex-direction: column;align-items: center;padding: 100px;">
+  <div class="container" style="display: flex;flex-direction: column;background-color: hsl(217, 19%, 24%); color: hsl(216, 15%, 52%); align-items: center;width: 400px;justify-content: center;text-align: center;height: 300px;justify-content: space-between;font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;letter-spacing: 3px; padding: 20px;border: none; border-radius: 20px;">
+
+    <h6 id="advice-id" style="color: hsl(150, 100%, 66%);text-transform: uppercase;"></h6>
+    <h3 id="output"></h3>
+    <img class="line-photo" src="images/pattern-divider-desktop.svg" width="300px">
+    <button onclick="getAdvice()" style="display: flex;align-items: center;justify-content: center;background-color: hsl(150, 100%, 66%);border: none;border-radius: 50px;padding: 12px;width: 30px;height: 30px;cursor: pointer;"><img class="btn-img" src="images/icon-dice.svg" width="30px"></button>
+  </div>
+</body>
+<script>
+  function getAdvice() {
+    fetch('https://api.adviceslip.com/advice')
+    .then(res => res.json())
+    .then(data =>{
+        document.getElementById('output').innerText = `${data.slip.advice}`;
+        document.getElementById('advice-id').innerText = `Advice #${data.slip.id}`;
+    })
+    .catch(error =>{
+        document.getElementById('output').innerText = 'Smth went wrong!';
+        console.error(error);
+    });
+  }
+
+  const smallSize = window.matchMedia("(max-width: 450px)");
+
+  function handleScreenChange(e) {
+    const container = document.querySelector('.container');
+    if (e.matches) {
+      container.style.display = 'flex';
+      container.style.alignItems = 'center';
+      container.style.width = '250px'
+      container.style.height = '400px'
+      //line-photo
+      document.querySelector('.line-photo').style.width = '200px'
+      document.querySelector('.btn-img').style.width = '20px'
+      document.body.classList.style.padding = '0'
+    } else {
+      container.style.display = 'flex';
+      container.style.alignItems = 'center';
+      container.style.width = '400px'
+      container.style.height = '300px'
+      //line-photo
+      document.querySelector('.line-photo').style.width = '320px'
+      document.querySelector('.btn-img').style.width = '20px'
+      document.body.classList.style.padding = '0'
+    }
+  }
+  handleScreenChange(smallSize); 
+  smallSize.addEventListener('change', handleScreenChange); 
+</script>
+</html>
